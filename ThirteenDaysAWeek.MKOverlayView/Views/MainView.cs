@@ -85,49 +85,16 @@ namespace ThirteenDaysAWeek.MKOverlayView.Views
 
 							if (isInView)
 							{
-								Console.WriteLine("In view!");
+								string message = string.Concat("You tapped ", polygon.Title);
+								UIAlertView alertView = new UIAlertView("Tap recognized!", message, null, "OK");
+
+								alertView.Show ();
 							}
 						}
 					}
 				}
 			}));
 		}
-
-		/*
-			this.mapView.AddGestureRecognizer(new UITapGestureRecognizer(r => {
-				//UITouch touch = (UITouch)t.AnyObject;
-				PointF point = r.LocationInView (mapView);
-				CLLocationCoordinate2D touchCoordinates = this.mapView.ConvertPoint (point, this.mapView);
-				MKMapPoint mapPoint = MKMapPoint.FromCoordinate (touchCoordinates);
-				
-				foreach (var overlay in this.mapView.Overlays)
-				{
-					if (overlay is MKPolygon)
-					{
-						MKPolygon touchedPolygon = (MKPolygon)overlay;
-						var touchedView = this.mapView.ViewForOverlay(touchedPolygon);
-						
-						if (touchedView is MKPolygonView)
-						{
-							MKPolygonView theView = (MKPolygonView)touchedView;
-							PointF polygonViewPoint = theView.PointForMapPoint(mapPoint);
-							var isInView = theView.Path.ContainsPoint(polygonViewPoint, false);
-							
-							if (isInView)
-							{
-								Console.WriteLine ("Touch was in view!");
-								this.mapView.SetVisibleMapRect (touchedPolygon.BoundingMapRect, true);
-								theView.FillColor = UIColor.Yellow;
-							}
-							else
-							{
-								Console.WriteLine ("Touch was not in view!");
-							}
-						}
-					}
-				}
-			}));
-		 */
 	}
 }
 
