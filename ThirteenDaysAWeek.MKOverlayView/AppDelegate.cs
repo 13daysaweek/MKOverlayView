@@ -4,6 +4,8 @@ using System.Linq;
 
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using ThirteenDaysAWeek.MKOverlayView;
+using ThirteenDaysAWeek.MKOverlayView.ViewControllers;
 
 namespace ThirteenDaysAWeek.MKOverlayView
 {

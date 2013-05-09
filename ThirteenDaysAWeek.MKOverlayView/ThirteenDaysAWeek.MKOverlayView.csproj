@@ -86,6 +86,9 @@
     <Folder Include="Resources\" />
     <Folder Include="Content\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\" />
+    <Folder Include="ViewControllers\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -93,18 +96,20 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="ThirteenDaysAWeek_MKOverlayViewViewController.cs" />
-    <Compile Include="ThirteenDaysAWeek_MKOverlayViewViewController.designer.cs">
-      <DependentUpon>ThirteenDaysAWeek_MKOverlayViewViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\Coordinates.cs" />
     <Compile Include="MapDelegate.cs" />
     <Compile Include="StatePickerChangedEventArgs.cs" />
     <Compile Include="StatePickerViewModel.cs" />
+    <Compile Include="ViewControllers\ThirteenDaysAWeek_MKOverlayViewViewController.cs" />
+    <Compile Include="ViewControllers\ThirteenDaysAWeek_MKOverlayViewViewController.designer.cs">
+      <DependentUpon>ThirteenDaysAWeek_MKOverlayViewViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainVIew.cs" />
+    <Compile Include="Helpers\DeviceHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <InterfaceDefinition Include="ThirteenDaysAWeek_MKOverlayViewViewController.xib" />
+    <InterfaceDefinition Include="Views\ThirteenDaysAWeek_MKOverlayViewViewController.xib" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
