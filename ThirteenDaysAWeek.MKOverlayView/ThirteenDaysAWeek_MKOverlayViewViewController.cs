@@ -18,6 +18,7 @@ namespace ThirteenDaysAWeek.MKOverlayView
 		private MKMapView mapView;
 		private UIPickerView statePicker;
 		private UIToolbar toolbar;
+		private MKPolygon currentStateOverlay;
 
 		public ThirteenDaysAWeek_MKOverlayViewViewController () : base ("ThirteenDaysAWeek_MKOverlayViewViewController", null)
 		{
@@ -36,7 +37,6 @@ namespace ThirteenDaysAWeek.MKOverlayView
 			base.ViewDidLoad ();
 			this.states = this.GetStates();
 			this.SetupView();
-			this.AddOverlays();
 		}
 		
 		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
@@ -67,14 +67,19 @@ namespace ThirteenDaysAWeek.MKOverlayView
 
 			this.statePicker = new UIPickerView(new RectangleF(0,500,this.View.Frame.Width, 200));
 			IList<string> stateList = this.states.Select (s => s.Name).ToList();
-			this.statePicker.Model = new StatePickerVIewModel(stateList);
+			StatePickerViewModel pickerViewModel = new StatePickerViewModel(stateList);
+			pickerViewModel.SelectedStateChanged += (sender, e) => {
+				this.OnStateSelected(e.SelectedState);
+			};
+			this.statePicker.Model = pickerViewModel;
+			this.statePicker.ShowSelectionIndicator = true;
 			this.View.AddSubview(this.statePicker);
 
 			this.mapView = new MKMapView(new RectangleF(0, 44, this.View.Frame.Width, this.View.Frame.Height -44));
 			this.mapView.Delegate = new MapDelegate();
 			this.View.AddSubview (mapView);
 		}
-
+		/*
 		private void AddOverlays()
 		{
 			foreach (State state in this.states)
@@ -85,6 +90,7 @@ namespace ThirteenDaysAWeek.MKOverlayView
 				this.mapView.AddOverlay(statePolygon);
 			}
 		}
+		*/
 
 		private IList<State> GetStates()
 		{
@@ -104,6 +110,20 @@ namespace ThirteenDaysAWeek.MKOverlayView
 			}).ToList();
 			
 			return states;
+		}
+
+		private void OnStateSelected(string stateName)
+		{
+			if (this.currentStateOverlay != null)
+			{
+				this.mapView.RemoveOverlay(this.currentStateOverlay);
+			}
+
+			State selectedState = this.states.First(state => state.Name == stateName);
+
+			CLLocationCoordinate2D[] stateBoundary = selectedState.Boundary.Select(coord => new CLLocationCoordinate2D(coord.Latitude, coord.Longitude)).ToArray();
+			this.currentStateOverlay = MKPolygon.FromCoordinates(stateBoundary);
+			this.mapView.AddOverlay (this.currentStateOverlay);
 		}
 	}
 }
