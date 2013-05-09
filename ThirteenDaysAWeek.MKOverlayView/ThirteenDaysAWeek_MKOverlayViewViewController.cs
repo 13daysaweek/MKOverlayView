@@ -55,7 +55,7 @@ namespace ThirteenDaysAWeek.MKOverlayView
 					UIView.BeginAnimations("moveMap");
 					UIView.SetAnimationDuration(.3);
 
-					this.statePicker.Frame = new RectangleF(0, 44, this.View.Frame.Width, 200);
+					this.statePicker.Frame = new RectangleF(0, 44, this.View.Frame.Width, 180);
 					this.mapView.Frame = new RectangleF(0, 244, this.mapView.Frame.Width, this.mapView.Frame.Height);
 
 					UIView.CommitAnimations();
@@ -65,7 +65,7 @@ namespace ThirteenDaysAWeek.MKOverlayView
 			this.toolbar.SetItems(new UIBarButtonItem[]{statesButton}, true);
 
 
-			this.statePicker = new UIPickerView(new RectangleF(0,500,this.View.Frame.Width, 200));
+			this.statePicker = new UIPickerView(new RectangleF(0,500,this.View.Frame.Width, 180));
 			IList<string> stateList = this.states.Select (s => s.Name).ToList();
 			StatePickerViewModel pickerViewModel = new StatePickerViewModel(stateList);
 			pickerViewModel.SelectedStateChanged += (sender, e) => {
@@ -119,11 +119,26 @@ namespace ThirteenDaysAWeek.MKOverlayView
 				this.mapView.RemoveOverlay(this.currentStateOverlay);
 			}
 
+
+
 			State selectedState = this.states.First(state => state.Name == stateName);
+
+			UIView.BeginAnimations("overlay");
+			UIView.SetAnimationDuration(.3);
+
+			this.MoveMapIntoViewAndPickerOutOfView();
 
 			CLLocationCoordinate2D[] stateBoundary = selectedState.Boundary.Select(coord => new CLLocationCoordinate2D(coord.Latitude, coord.Longitude)).ToArray();
 			this.currentStateOverlay = MKPolygon.FromCoordinates(stateBoundary);
 			this.mapView.AddOverlay (this.currentStateOverlay);
+
+			UIView.CommitAnimations();
+		}
+
+		private void MoveMapIntoViewAndPickerOutOfView()
+		{
+			this.mapView.Frame = new RectangleF(0, 44, this.View.Frame.Width, this.View.Frame.Height - 44);
+			this.statePicker.Frame = new RectangleF(0, 500, this.View.Frame.Width, 180);
 		}
 	}
 }
