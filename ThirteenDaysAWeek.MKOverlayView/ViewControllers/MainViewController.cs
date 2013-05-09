@@ -1,38 +1,29 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Xml.Linq;
-
-using MonoTouch.Foundation;
 using MonoTouch.CoreLocation;
+using MonoTouch.Foundation;
 using MonoTouch.MapKit;
 using MonoTouch.UIKit;
 using ThirteenDaysAWeek.MKOverlayView.Models;
 using ThirteenDaysAWeek.MKOverlayView.Views;
-using System.Drawing;
 
 namespace ThirteenDaysAWeek.MKOverlayView.ViewControllers
 {
-	[Register ("MainViewController")]
 	public partial class MainViewController : UIViewController
 	{
 		private IList<State> states;
-		private MKMapView mapView;
-		private UIPickerView statePicker;
-		private UIToolbar toolbar;
 		private MKPolygon currentStateOverlay;
 		private MainView mainView;
-
-		public MainViewController ()
-		{
-		}
 
 		public override void LoadView ()
 		{
 			this.mainView = new MainView(new RectangleF(0, 
-			                                       0, 
-			                                       UIApplication.SharedApplication.GetCurrentWidth(), 
-			                                       UIApplication.SharedApplication.GetCurrentHeight()));
+			                                       		0, 
+			                                       		UIApplication.SharedApplication.GetCurrentWidth(), 
+			                                       		UIApplication.SharedApplication.GetCurrentHeight()));
 			this.View = mainView;
 		}
 	
@@ -41,13 +32,16 @@ namespace ThirteenDaysAWeek.MKOverlayView.ViewControllers
 			base.ViewDidLoad ();
 			this.states = this.GetStates();
 			this.SetupPickerView();
-//			this.SetupView();
 		}
-		
-		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
+
+		public override UIInterfaceOrientationMask GetSupportedInterfaceOrientations ()
 		{
-			// Return true for supported orientations
-			return (toInterfaceOrientation != UIInterfaceOrientation.PortraitUpsideDown);
+			return UIInterfaceOrientationMask.Portrait | UIInterfaceOrientationMask.PortraitUpsideDown;
+		}
+
+		public override UIInterfaceOrientation PreferredInterfaceOrientationForPresentation ()
+		{
+			return UIInterfaceOrientation.Portrait;
 		}
 
 		private void SetupPickerView()
@@ -59,33 +53,6 @@ namespace ThirteenDaysAWeek.MKOverlayView.ViewControllers
 			};
 
 			this.mainView.StatesPickerView.Model = pickerViewModel;
-		}
-
-		private void SetupView()
-		{
-			this.toolbar = new UIToolbar(new RectangleF(0,0, this.View.Frame.Width, 44));
-			this.View.AddSubview(toolbar);
-
-			UIBarButtonItem statesButton = new UIBarButtonItem("States", UIBarButtonItemStyle.Bordered, (s,e) => {
-				this.mainView.MoveMapOutOfViewAndPickerIntoView();
-			});
-
-			this.toolbar.SetItems(new UIBarButtonItem[]{statesButton}, true);
-
-
-			this.statePicker = new UIPickerView(new RectangleF(0,500,this.View.Frame.Width, 180));
-			IList<string> stateList = this.states.Select (s => s.Name).ToList();
-			StatePickerViewModel pickerViewModel = new StatePickerViewModel(stateList);
-			pickerViewModel.SelectedStateChanged += (sender, e) => {
-				this.OnStateSelected(e.SelectedState);
-			};
-			this.statePicker.Model = pickerViewModel;
-			this.statePicker.ShowSelectionIndicator = true;
-			this.View.AddSubview(this.statePicker);
-
-			this.mapView = new MKMapView(new RectangleF(0, 44, this.View.Frame.Width, this.View.Frame.Height -44));
-			this.mapView.Delegate = new MapDelegate();
-			this.View.AddSubview (mapView);
 		}
 
 		private IList<State> GetStates()

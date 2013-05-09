@@ -1,4 +1,3 @@
-using System;
 using MonoTouch.Foundation;
 using MonoTouch.MapKit;
 using MonoTouch.UIKit;
