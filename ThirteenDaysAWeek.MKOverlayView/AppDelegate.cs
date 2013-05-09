@@ -17,7 +17,7 @@ namespace ThirteenDaysAWeek.MKOverlayView
 	{
 		// class-level declarations
 		UIWindow window;
-		ThirteenDaysAWeek_MKOverlayViewViewController viewController;
+		MainViewController viewController;
 
 		//
 		// This method is invoked when the application has loaded and is ready to run. In this 
@@ -30,7 +30,7 @@ namespace ThirteenDaysAWeek.MKOverlayView
 		{
 			window = new UIWindow (UIScreen.MainScreen.Bounds);
 			
-			viewController = new ThirteenDaysAWeek_MKOverlayViewViewController ();
+			viewController = new MainViewController ();
 			window.RootViewController = viewController;
 			window.MakeKeyAndVisible ();
 			

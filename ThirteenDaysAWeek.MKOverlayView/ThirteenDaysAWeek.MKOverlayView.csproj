@@ -88,7 +88,7 @@
     <Folder Include="Models\" />
     <Folder Include="Views\" />
     <Folder Include="ViewControllers\" />
-    <Folder Include="Helpers\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -101,15 +101,12 @@
     <Compile Include="MapDelegate.cs" />
     <Compile Include="StatePickerChangedEventArgs.cs" />
     <Compile Include="StatePickerViewModel.cs" />
-    <Compile Include="ViewControllers\ThirteenDaysAWeek_MKOverlayViewViewController.cs" />
-    <Compile Include="ViewControllers\ThirteenDaysAWeek_MKOverlayViewViewController.designer.cs">
-      <DependentUpon>ThirteenDaysAWeek_MKOverlayViewViewController.cs</DependentUpon>
+    <Compile Include="ViewControllers\MainViewController.cs" />
+    <Compile Include="ViewControllers\MainViewController.designer.cs">
+      <DependentUpon>MainViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainVIew.cs" />
-    <Compile Include="Helpers\DeviceHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <InterfaceDefinition Include="Views\ThirteenDaysAWeek_MKOverlayViewViewController.xib" />
+    <Compile Include="Views\MainView.cs" />
+    <Compile Include="Extensions\DeviceExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
