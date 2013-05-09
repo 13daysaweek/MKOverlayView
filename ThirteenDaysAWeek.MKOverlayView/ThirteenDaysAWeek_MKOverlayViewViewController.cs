@@ -45,7 +45,8 @@ namespace ThirteenDaysAWeek.MKOverlayView
 
 		private void SetupView()
 		{
-			this.mapView = new MKMapView(new RectangleF(0, 0, this.View.Frame.Width, this.View.Frame.Height - 44));
+			this.mapView = new MKMapView(new RectangleF(0, 0, this.View.Frame.Width, this.View.Frame.Height));
+			this.mapView.Delegate = new MapDelegate();
 			this.View.AddSubview (mapView);
 		}
 
