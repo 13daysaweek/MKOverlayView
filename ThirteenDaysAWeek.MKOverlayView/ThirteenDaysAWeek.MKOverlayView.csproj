@@ -101,6 +101,7 @@
     <Compile Include="Models\Coordinates.cs" />
     <Compile Include="MapDelegate.cs" />
     <Compile Include="StatePickerVIewModel.cs" />
+    <Compile Include="StatePickerChangedEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="ThirteenDaysAWeek_MKOverlayViewViewController.xib" />

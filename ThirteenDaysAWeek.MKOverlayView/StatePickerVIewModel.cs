@@ -8,6 +8,8 @@ namespace ThirteenDaysAWeek.MKOverlayView
  	{
 		private readonly IList<string> states;
 
+		public event EventHandler<StatePickerChangedEventArgs> SelectedStateChanged;
+
 		public StatePickerVIewModel(IList<string> states)
 		{
 			this.states = states;
@@ -32,6 +34,15 @@ namespace ThirteenDaysAWeek.MKOverlayView
 		{
 			return this.states[row];
 		}
+
+		public override void Selected (UIPickerView picker, int row, int component)
+		{
+			if (this.SelectedStateChanged != null)
+			{
+				this.SelectedStateChanged(this, new StatePickerChangedEventArgs(this.states[row]));
+			}
+		}
 	}
+
 }
 

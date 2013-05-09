@@ -16,6 +16,8 @@ namespace ThirteenDaysAWeek.MKOverlayView
 	{
 		private IList<State> states;
 		private MKMapView mapView;
+		private UIPickerView statePicker;
+		private UIToolbar toolbar;
 
 		public ThirteenDaysAWeek_MKOverlayViewViewController () : base ("ThirteenDaysAWeek_MKOverlayViewViewController", null)
 		{
@@ -45,7 +47,30 @@ namespace ThirteenDaysAWeek.MKOverlayView
 
 		private void SetupView()
 		{
-			this.mapView = new MKMapView(new RectangleF(0, 0, this.View.Frame.Width, this.View.Frame.Height));
+			this.toolbar = new UIToolbar(new RectangleF(0,0, this.View.Frame.Width, 44));
+			this.View.AddSubview(toolbar);
+
+			UIBarButtonItem statesButton = new UIBarButtonItem("States", UIBarButtonItemStyle.Bordered, (s,e) => {
+				this.BeginInvokeOnMainThread(() => {
+					UIView.BeginAnimations("moveMap");
+					UIView.SetAnimationDuration(.3);
+
+					this.statePicker.Frame = new RectangleF(0, 44, this.View.Frame.Width, 200);
+					this.mapView.Frame = new RectangleF(0, 244, this.mapView.Frame.Width, this.mapView.Frame.Height);
+
+					UIView.CommitAnimations();
+				});
+			});
+
+			this.toolbar.SetItems(new UIBarButtonItem[]{statesButton}, true);
+
+
+			this.statePicker = new UIPickerView(new RectangleF(0,500,this.View.Frame.Width, 200));
+			IList<string> stateList = this.states.Select (s => s.Name).ToList();
+			this.statePicker.Model = new StatePickerVIewModel(stateList);
+			this.View.AddSubview(this.statePicker);
+
+			this.mapView = new MKMapView(new RectangleF(0, 44, this.View.Frame.Width, this.View.Frame.Height -44));
 			this.mapView.Delegate = new MapDelegate();
 			this.View.AddSubview (mapView);
 		}
