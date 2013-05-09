@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\Coordinates.cs" />
+    <Compile Include="StatePickerSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="ThirteenDaysAWeek_MKOverlayViewViewController.xib" />
