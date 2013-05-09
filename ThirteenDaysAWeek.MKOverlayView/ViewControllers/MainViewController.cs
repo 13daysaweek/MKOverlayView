@@ -13,6 +13,7 @@ using System.Drawing;
 
 namespace ThirteenDaysAWeek.MKOverlayView.ViewControllers
 {
+	[Register ("MainViewController")]
 	public partial class MainViewController : UIViewController
 	{
 		private IList<State> states;

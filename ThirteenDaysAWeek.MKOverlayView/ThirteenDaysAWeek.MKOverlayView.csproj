@@ -102,9 +102,6 @@
     <Compile Include="StatePickerChangedEventArgs.cs" />
     <Compile Include="StatePickerViewModel.cs" />
     <Compile Include="ViewControllers\MainViewController.cs" />
-    <Compile Include="ViewControllers\MainViewController.designer.cs">
-      <DependentUpon>MainViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainView.cs" />
     <Compile Include="Extensions\DeviceExtensions.cs" />
   </ItemGroup>
