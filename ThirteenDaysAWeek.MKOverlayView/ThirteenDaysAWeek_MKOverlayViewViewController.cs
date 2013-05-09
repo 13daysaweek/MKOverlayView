@@ -1,8 +1,11 @@
 using System;
-using System.Drawing;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
 
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using ThirteenDaysAWeek.MKOverlayView.Models;
 
 namespace ThirteenDaysAWeek.MKOverlayView
 {
@@ -31,6 +34,26 @@ namespace ThirteenDaysAWeek.MKOverlayView
 		{
 			// Return true for supported orientations
 			return (toInterfaceOrientation != UIInterfaceOrientation.PortraitUpsideDown);
+		}
+
+		private IList<State> GetStates()
+		{
+			string filePath = NSBundle.MainBundle.PathForResource("Content/states", "xml");
+			XDocument document = XDocument.Load(filePath);
+			
+			var states = (from n in document.Descendants("state")
+			              select new State
+			              {
+				Name = n.Attribute("name").Value,
+				Boundary = (from s in n.Descendants("point")
+				               select new Coordinates
+				               {
+					Latitude = double.Parse(s.Attribute("lat").Value),
+					Longitude = double.Parse(s.Attribute("lng").Value)
+				}).ToList()
+			}).ToList();
+			
+			return states;
 		}
 	}
 }
