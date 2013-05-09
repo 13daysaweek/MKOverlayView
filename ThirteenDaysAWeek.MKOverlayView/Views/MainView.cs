@@ -2,6 +2,8 @@ using System;
 using MonoTouch.MapKit;
 using MonoTouch.UIKit;
 using System.Drawing;
+using MonoTouch.CoreLocation;
+using MonoTouch.Foundation;
 
 namespace ThirteenDaysAWeek.MKOverlayView.Views
 {
@@ -29,6 +31,8 @@ namespace ThirteenDaysAWeek.MKOverlayView.Views
 			this.AddSubview (this.Toolbar);
 			this.AddSubview(this.MapView);
 			this.AddSubview(this.StatesPickerView);
+
+			this.SetupGestureRecognizer();
 		}
 
 		public UIToolbar Toolbar {get; private set;}
@@ -58,6 +62,72 @@ namespace ThirteenDaysAWeek.MKOverlayView.Views
 			
 			UIView.CommitAnimations();
 		}
+
+		private void SetupGestureRecognizer()
+		{
+			this.MapView.AddGestureRecognizer(new UITapGestureRecognizer(r => {
+				PointF pointInView = r.LocationInView(this.MapView);
+				CLLocationCoordinate2D touchCoordinates = this.MapView.ConvertPoint(pointInView, this.MapView);
+				MKMapPoint mapPoint = MKMapPoint.FromCoordinate(touchCoordinates);
+
+				foreach (NSObject overlay in this.MapView.Overlays)
+				{
+					if (overlay is MKPolygon)
+					{
+						MKPolygon polygon = (MKPolygon)overlay;
+						MonoTouch.MapKit.MKOverlayView view = this.MapView.ViewForOverlay(polygon);
+
+						if (view is MKPolygonView)
+						{
+							MKPolygonView polygonView = (MKPolygonView)view;
+							PointF polygonViewPoint = polygonView.PointForMapPoint(mapPoint);
+							bool isInView = polygonView.Path.ContainsPoint(polygonViewPoint, false);
+
+							if (isInView)
+							{
+								Console.WriteLine("In view!");
+							}
+						}
+					}
+				}
+			}));
+		}
+
+		/*
+			this.mapView.AddGestureRecognizer(new UITapGestureRecognizer(r => {
+				//UITouch touch = (UITouch)t.AnyObject;
+				PointF point = r.LocationInView (mapView);
+				CLLocationCoordinate2D touchCoordinates = this.mapView.ConvertPoint (point, this.mapView);
+				MKMapPoint mapPoint = MKMapPoint.FromCoordinate (touchCoordinates);
+				
+				foreach (var overlay in this.mapView.Overlays)
+				{
+					if (overlay is MKPolygon)
+					{
+						MKPolygon touchedPolygon = (MKPolygon)overlay;
+						var touchedView = this.mapView.ViewForOverlay(touchedPolygon);
+						
+						if (touchedView is MKPolygonView)
+						{
+							MKPolygonView theView = (MKPolygonView)touchedView;
+							PointF polygonViewPoint = theView.PointForMapPoint(mapPoint);
+							var isInView = theView.Path.ContainsPoint(polygonViewPoint, false);
+							
+							if (isInView)
+							{
+								Console.WriteLine ("Touch was in view!");
+								this.mapView.SetVisibleMapRect (touchedPolygon.BoundingMapRect, true);
+								theView.FillColor = UIColor.Yellow;
+							}
+							else
+							{
+								Console.WriteLine ("Touch was not in view!");
+							}
+						}
+					}
+				}
+			}));
+		 */
 	}
 }
 

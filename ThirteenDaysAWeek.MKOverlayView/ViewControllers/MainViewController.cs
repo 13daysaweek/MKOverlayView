@@ -88,6 +88,7 @@ namespace ThirteenDaysAWeek.MKOverlayView.ViewControllers
 
 			CLLocationCoordinate2D[] stateBoundary = selectedState.Boundary.Select(coord => new CLLocationCoordinate2D(coord.Latitude, coord.Longitude)).ToArray();
 			this.currentStateOverlay = MKPolygon.FromCoordinates(stateBoundary);
+			this.currentStateOverlay.Title = selectedState.Name;
 			this.mainView.MapView.AddOverlay (this.currentStateOverlay);
 		}
 	}
