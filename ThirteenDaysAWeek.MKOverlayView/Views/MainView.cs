@@ -9,19 +9,24 @@ namespace ThirteenDaysAWeek.MKOverlayView.Views
 {
 	public class MainView : UIView
 	{
+		private const double ANIMATION_DURATION = .4;
+		private bool statePickerIsVisible;
+
 		public MainView (RectangleF frame) : base(frame)
 		{
 			this.SetupView();
 		}
 
+		/// <summary>
+		/// Initialize all the things and add them to the view
+		/// </summary>
 		private void SetupView()
 		{
-			//this.Toolbar = new UIToolbar(new RectangleF(0, 0, this.Frame.Width, this.Frame.Height));
-			this.Toolbar = new UIToolbar(new RectangleF(0, 0, this.Frame.Width, 44));
-			this.MapView = new MKMapView(new RectangleF(0, 44, this.Frame.Width, this.Frame.Height - 44));
+			this.Toolbar = new UIToolbar(new RectangleF(0f, 0f, this.Frame.Width, 44f));
+			this.MapView = new MKMapView(new RectangleF(0f, 44f, this.Frame.Width, this.Frame.Height - 44f));
 			this.MapView.Delegate = new MapDelegate();
 
-			this.StatesPickerView = new UIPickerView(new RectangleF(900,44,this.Frame.Width, 180));
+			this.StatesPickerView = new UIPickerView(new RectangleF(900f, 44f, this.Frame.Width, 180f));
 			this.StatesPickerView.ShowSelectionIndicator = true;
 
 			UIBarButtonItem statesButton = new UIBarButtonItem("States", UIBarButtonItemStyle.Bordered, (s,e) => {
@@ -45,27 +50,38 @@ namespace ThirteenDaysAWeek.MKOverlayView.Views
 		public void MoveMapIntoViewAndPickerOutOfView()
 		{
 			UIView.BeginAnimations("overlay");
-			UIView.SetAnimationDuration(.3);
+			UIView.SetAnimationDuration(ANIMATION_DURATION);
 			
-			this.MapView.Frame = new RectangleF(0, 44, this.Frame.Width, this.Frame.Height - 44);
-			this.StatesPickerView.Frame = new RectangleF(900, 44, this.Frame.Width, 180);
+			this.MapView.Frame = new RectangleF(0f, 44f, this.Frame.Width, this.Frame.Height - 44f);
+			this.StatesPickerView.Frame = new RectangleF(900f, 44f, this.Frame.Width, 180f);
 			
 			UIView.CommitAnimations();
+			this.statePickerIsVisible = false;
 		}
 		
 		public void MoveMapOutOfViewAndPickerIntoView()
 		{
-			UIView.BeginAnimations("moveMap");
-			UIView.SetAnimationDuration(.3);
+			if (!this.statePickerIsVisible)
+			{
+				UIView.BeginAnimations("moveMap");
+				UIView.SetAnimationDuration(ANIMATION_DURATION);
 			
-			this.StatesPickerView.Frame = new RectangleF(0, 44, this.Frame.Width, 180);
-			this.MapView.Frame = new RectangleF(0, 244, this.MapView.Frame.Width, this.MapView.Frame.Height);
+				this.StatesPickerView.Frame = new RectangleF(0f, 44f, this.Frame.Width, 180f);
+				this.MapView.Frame = new RectangleF(0f, 244f, this.MapView.Frame.Width, this.MapView.Frame.Height);
 			
-			UIView.CommitAnimations();
+				UIView.CommitAnimations();
+				this.statePickerIsVisible = true;
+			}
 		}
 
 		private void SetupGestureRecognizer()
 		{
+			// We want to respond to a tap gesture on our polygon.  MKPolygonView supports gesture recognizers
+			// however it appears to ignore them.  To get around that, we'll attach a gesture recognizer to the
+			// MKMapView.  In the action for our gesture recognizer, we'll determine whether the tap was inside
+			// of the polygon or not.  Note the looping through the Overlays collection on the MapView.  For this
+			// app that isn't strictly necessary as we'll only ever have one overlay, however it's a good demonstration
+			// of how you'd handle this with multiple overlays on your map
 			this.MapView.AddGestureRecognizer(new UITapGestureRecognizer(r => {
 				PointF pointInView = r.LocationInView(this.MapView);
 				CLLocationCoordinate2D touchCoordinates = this.MapView.ConvertPoint(pointInView, this.MapView);
