@@ -16,7 +16,8 @@ namespace ThirteenDaysAWeek.MKOverlayView.Views
 
 		private void SetupView()
 		{
-			this.Toolbar = new UIToolbar(new RectangleF(0, 0, this.Frame.Width, this.Frame.Height));
+			//this.Toolbar = new UIToolbar(new RectangleF(0, 0, this.Frame.Width, this.Frame.Height));
+			this.Toolbar = new UIToolbar(new RectangleF(0, 0, this.Frame.Width, 44));
 			this.MapView = new MKMapView(new RectangleF(0, 44, this.Frame.Width, this.Frame.Height - 44));
 			this.MapView.Delegate = new MapDelegate();
 
